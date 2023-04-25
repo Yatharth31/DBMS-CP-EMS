@@ -118,7 +118,7 @@ def search():
         employee_id=request.form.get('employee_id')
         bio=Employee.query.filter_by(employee_id=employee_id).first()
         project=Project.query.filter_by(employee_id=employee_id).first()
-        return render_template('search.html',bio=bio,project_name=project)
+        return render_template('search.html',bio=bio,project=project)
         
     return render_template('search.html')
 
