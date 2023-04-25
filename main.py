@@ -6,7 +6,6 @@ from flask_login import login_user,logout_user,login_manager,LoginManager
 from flask_login import login_required,current_user
 import json
 
-# MY db connection
 local_server= True
 app = Flask(__name__)
 app.secret_key='kusumachandashwini'
@@ -21,8 +20,6 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-
-# app.config['SQLALCHEMY_DATABASE_URL']='mysql://username:password@localhost/databas_table_name'
 app.config['SQLALCHEMY_DATABASE_URI']='mysql://root:root@localhost/ems_db'
 db=SQLAlchemy(app)
 
@@ -39,7 +36,7 @@ class Department(db.Model):
 class Project(db.Model):
     pid=db.Column(db.Integer,primary_key=True)
     employee_id=db.Column(db.String(100))
-    project=db.Column(db.Integer())
+    project_name=db.Column(db.String(100))
 
 class Trig(db.Model):
     tid=db.Column(db.Integer,primary_key=True)
@@ -100,17 +97,17 @@ def department():
     return render_template('department.html')
 
 @app.route('/addproject',methods=['POST','GET'])
-def addattendance():
+def addproject():
     # query=db.engine.execute(f"SELECT * FROM `student`") 
     query=Employee.query.all()
     if request.method=="POST":
         employee_id=request.form.get('employee_id')
-        attend=request.form.get('attend')
-        print(attend,employee_id)
-        atte=Project(employee_id=employee_id,attendance=attend)
-        db.session.add(atte)
+        project_name=request.form.get('project_name')
+        print(project_name,employee_id)
+        project=Project(employee_id=employee_id,project_name=project_name)
+        db.session.add(project)
         db.session.commit()
-        flash("PRoject added","warning")
+        flash("Project added","warning")
 
         
     return render_template('project.html',query=query)
@@ -120,8 +117,8 @@ def search():
     if request.method=="POST":
         employee_id=request.form.get('employee_id')
         bio=Employee.query.filter_by(employee_id=employee_id).first()
-        attend=Project.query.filter_by(employee_id=employee_id).first()
-        return render_template('search.html',bio=bio,attend=attend)
+        project=Project.query.filter_by(employee_id=employee_id).first()
+        return render_template('search.html',bio=bio,project_name=project)
         
     return render_template('search.html')
 

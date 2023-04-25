@@ -58,10 +58,12 @@ Search
   <li>Email  : {{bio.email}}</li>
   <li>Number  : {{bio.number}}</li>
   <li>Address  : {{bio.address}}</li>
+  {% if project is defined %}
   <hr>
   <h3>Project Status</h3>
   <hr>
-  <li>Project: {{attend.project}}</li>
+  <li>Project: {{project.project_name}}</li>
+{% endif %}
 <br><br>
 {% else %}
 No such results
